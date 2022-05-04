@@ -1,3 +1,3 @@
-module CrazyCollin/rpc-framework-go
+module gorpc
 
 go 1.17
