@@ -131,35 +131,9 @@ func (client *Client) terminateCalls(err error) {
 
 //
 // receive
-// @Description:
+// @Description: 接受server返回信息
 // @receiver client
 //
-//func (client *Client) receive() {
-//	var err error
-//	for err == nil {
-//		var h codec.Header
-//		if err = client.cc.ReadHeader(&h); err != nil {
-//			break
-//		}
-//		call := client.removeCall(h.Seq)
-//		switch {
-//		case call == nil:
-//			err = client.cc.ReadBody(nil)
-//		case h.Error != "":
-//			call.Error = fmt.Errorf(h.Error)
-//			err = client.cc.ReadBody(nil)
-//			call.done()
-//		default:
-//			err = client.cc.ReadBody(call.Reply)
-//			if err != nil {
-//				call.Error = errors.New("reading body " + err.Error())
-//			}
-//			call.done()
-//		}
-//	}
-//	client.terminateCalls(err)
-//}
-
 func (client *Client) receive() {
 	var err error
 	for err == nil {
@@ -278,7 +252,11 @@ func Dial(network, address string, opts ...*Option) (client *Client, err error) 
 		return nil, err
 	}
 	defer func() {
-		_ = conn.Close()
+		if err != nil {
+			_ = conn.Close()
+
+		}
+		//_ = conn.Close()
 	}()
 	return NewClient(conn, opt)
 }
