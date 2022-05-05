@@ -39,6 +39,7 @@ func (server *Server) Accept(lis net.Listener) {
 			log.Println("rpc server:accept error:", err)
 			return
 		}
+		log.Println("rpc server:accept connection")
 		go server.ServeConn(conn)
 	}
 }
@@ -55,10 +56,12 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 	}()
 	var opt Option
 	//依照Option格式解码
+	log.Println("rpc server:start decode option")
 	if err := json.NewDecoder(conn).Decode(&opt); err != nil {
 		log.Println("rpc server:option error:", err)
 		return
 	}
+	log.Println("rpc server:decode option success")
 	if opt.MagicNumber != MagicNumber {
 		log.Println("rpc server:invalid magic number:", opt.MagicNumber)
 		return
@@ -68,6 +71,7 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 		log.Println("rpc server:invalid codec type:", opt.MagicNumber)
 		return
 	}
+	log.Println("rpc server:init server success")
 	//传入conn
 	server.serveCodec(f(conn))
 }
@@ -85,18 +89,22 @@ func (server *Server) serveCodec(cc codec.Codec) {
 	sending := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
 	for true {
+		log.Println("rpc server:start to read a request")
 		req, err := server.readRequest(cc)
 		if err != nil {
+			fmt.Println(err)
 			if req == nil {
 				break
 			}
-			req.h.Error = err
+			req.h.Error = err.Error()
 			server.sendResponse(cc, req.h, invalidRequest, sending)
 			continue
 		}
+		log.Println("rpc server:read a request,start handle the request...")
 		wg.Add(1)
 		go server.handleRequest(cc, req, sending, wg)
 	}
+	log.Println("rpc server:server shutdown error!!!")
 	wg.Wait()
 	_ = cc.Close()
 }
@@ -121,8 +129,9 @@ type request struct {
 func (server *Server) readRequestHeader(cc codec.Codec) (*codec.Header, error) {
 	var h codec.Header
 	if err := cc.ReadHeader(&h); err != nil {
+		fmt.Println(h)
 		if err != io.EOF && err != io.ErrUnexpectedEOF {
-			log.Println("rpc server:read head error:", err)
+			log.Println("rpc server: read header error:", err)
 		}
 		return nil, err
 	}

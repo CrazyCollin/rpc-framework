@@ -6,7 +6,7 @@ type Header struct {
 	//服务名和方法名
 	ServiceMethod string
 	Seq           uint64
-	Error         error
+	Error         string
 }
 
 type Codec interface {
