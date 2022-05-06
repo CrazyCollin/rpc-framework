@@ -66,7 +66,7 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 	}()
 	var opt Option
 	//依照Option格式解码
-	log.Println("rpc server:start decode option")
+	//log.Println("rpc server:start decode option")
 	if err := json.NewDecoder(conn).Decode(&opt); err != nil {
 		log.Println("rpc server:option error:", err)
 		return
@@ -99,7 +99,7 @@ func (server *Server) serveCodec(cc codec.Codec, opt *Option) {
 	sending := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
 	for true {
-		log.Println("rpc server:start to read a request")
+		//log.Println("rpc server:start to read a request")
 		req, err := server.readRequest(cc)
 		if err != nil {
 			fmt.Println(err)
@@ -110,7 +110,7 @@ func (server *Server) serveCodec(cc codec.Codec, opt *Option) {
 			server.sendResponse(cc, req.h, invalidRequest, sending)
 			continue
 		}
-		log.Println("rpc server:read a request,start handle the request...")
+		//log.Println("rpc server:read a request,start handle the request...")
 		wg.Add(1)
 		go server.handleRequest(cc, req, sending, wg, opt.ConnectTimeout)
 	}

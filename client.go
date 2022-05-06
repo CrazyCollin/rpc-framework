@@ -212,8 +212,8 @@ func newClientCodec(cc codec.Codec, opt *Option) *Client {
 		pending: make(map[uint64]*Call),
 	}
 	go client.receive()
-	log.Println("rpc client:shutdown status is ", client.shutdown)
-	log.Println("rpc client:init client success")
+	//log.Println("rpc client:shutdown status is ", client.shutdown)
+	//log.Println("rpc client:init client success")
 	return client
 }
 
