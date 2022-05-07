@@ -20,7 +20,11 @@ func (g *GobCodec) Close() error {
 }
 
 func (g *GobCodec) ReadHeader(header *Header) error {
-	return g.dec.Decode(header)
+	err := g.dec.Decode(header)
+	//if err != nil {
+	//	log.Println("codec decode header error:", err)
+	//}
+	return err
 }
 
 func (g *GobCodec) ReadBody(body interface{}) error {

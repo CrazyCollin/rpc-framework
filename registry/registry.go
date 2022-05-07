@@ -26,7 +26,7 @@ type ServerItem struct {
 
 const (
 	defaultPath    = "/_gorpc_/registry"
-	defaultTimeout = 5 * time.Second
+	defaultTimeout = 5 * time.Minute
 )
 
 func NewGoRegistry(timeout time.Duration) *GoRegistry {

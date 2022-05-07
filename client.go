@@ -145,8 +145,8 @@ func (client *Client) receive() {
 	for err == nil {
 		var h codec.Header
 		if err = client.cc.ReadHeader(&h); err != nil {
-			fmt.Println(err)
-			log.Println("rpc client:header decode errors happen")
+			//fmt.Println(err)
+			//log.Println("rpc client:header decode errors happen")
 			break
 		}
 		call := client.removeCall(h.Seq)
