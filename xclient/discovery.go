@@ -24,7 +24,7 @@ type Discovery interface {
 
 //
 // MultiServersDiscovery
-// @Description: Server服务发现
+// @Description: Server端服务发现模块
 //
 type MultiServersDiscovery struct {
 	r       *rand.Rand
