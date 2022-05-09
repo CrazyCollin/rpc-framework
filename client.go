@@ -160,10 +160,12 @@ func (client *Client) receive() {
 			err = client.cc.ReadBody(nil)
 			call.done()
 		default:
+			//读取调用结果
 			err = client.cc.ReadBody(call.Reply)
 			if err != nil {
 				call.Error = errors.New("reading body " + err.Error())
 			}
+			//通知异步调用成功
 			call.done()
 		}
 	}

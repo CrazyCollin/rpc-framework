@@ -40,7 +40,7 @@ var DefaultGoRegistry = NewGoRegistry(defaultTimeout)
 
 //
 // putServer
-// @Description: 在注册中心中注册服务
+// @Description: 在注册中心中注册服务提供方
 // @receiver r
 // @param addr
 //
@@ -51,6 +51,9 @@ func (r *GoRegistry) putServer(addr string) {
 	if s == nil {
 		//注册服务，记录服务地址和时间
 		r.servers[addr] = &ServerItem{Addr: addr, start: time.Now()}
+	} else {
+		//响应心跳连接
+		s.start = time.Now()
 	}
 }
 
@@ -125,6 +128,7 @@ func Heartbeat(registry, addr string, duration time.Duration) {
 	go func() {
 		t := time.NewTicker(duration)
 		for err == nil {
+			//打点器每4min发送一次心跳
 			<-t.C
 			err = sendHeartbeat(registry, addr)
 		}

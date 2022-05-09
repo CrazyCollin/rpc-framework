@@ -62,6 +62,7 @@ func foo(xc *xclient.XClient, ctx context.Context, typ, serviceMethod string, ar
 
 func call(registry string) {
 	d := xclient.NewGoRegistryDiscovery(registry, 0)
+	//客户端注册服务发现模块
 	xc := xclient.NewXClient(d, xclient.RandomSelect, nil)
 	defer func() { _ = xc.Close() }()
 	// send request & receive response

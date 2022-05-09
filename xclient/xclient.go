@@ -8,10 +8,11 @@ import (
 )
 
 type XClient struct {
-	d       Discovery
-	mode    SelectMode
-	opt     *Option
-	mu      sync.Mutex
+	d    Discovery
+	mode SelectMode
+	opt  *Option
+	mu   sync.Mutex
+	//复用已经建立连接的client，减少资源消耗
 	clients map[string]*Client
 }
 
